@@ -1,4 +1,6 @@
-# LoL-Grubs
+# Analysis of Void Grubs in League of Legends (Pro Play 2024)
+
+## Introduction
 
 ![voidgrubs.jpg](voidgrubs.jpg)
 
@@ -20,3 +22,9 @@ This dataset from [Oracle's Elixir](https://oracleselixir.com/tools/downloads) c
 - `void_grubs`: the number of void grubs taken by that team
 - `opp_void_grubs`: the number of void grubs taken by the opposing team
 - `heralds`: whether or not a team took the [rift herald](https://leagueoflegends.fandom.com/wiki/Rift_Herald/LoL). `1` means the team obtained the rift herald, `0` means they did not.
+
+## Data Cleaning and EDA
+
+First, the dataset was split into two new datasets, one having information about the players, and one having information about the overall outcome of the match. Some rows had matches played in 2024 were played in patches before 14.01; these were all removed, as void grubs only exist in patch 14.01 and beyond. 
+
+Some rows had matches where their `datacompleteness` was not `complete` (marked `partial`), so they did not have complete information on the number of void grubs that were taken. These rows were removed as well. Additionally, a column called `majority_grubs` was added to denote if a team was able to take 4 or more grubs.
