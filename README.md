@@ -123,7 +123,7 @@ Some rows had matches where their `datacompleteness` was not `complete` (marked 
 ### Univariate Analysis
 
 <iframe
-  src="uni.html"
+  src="assets/uni.html"
   width="800"
   height="600"
   frameborder="0"
@@ -164,6 +164,13 @@ Note: Tiebreakers were played but are not included in the summation of grubs for
 
 The total number of grubs taken does show some correlation with the final standing; however, there are a few noticeable outliers. For instance, Cloud9 took the most grubs, but came in 3rd place. Immortals had the 4th-highest number of grubs, but came in last. On the flip side, 100 Thieves had the second-least grubs, but came in second overall. 
 
+<iframe
+  src="assets/bi3.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 Lastly, this plot shows the distribution of number of grubs and if each team obtained the rift herald or not. Compared to the results plot, the distribution of grubs for teams that did not get the rift herald end up being lower. 
 
 ### Aggregate Statistics
@@ -202,9 +209,13 @@ Lastly, this plot shows the distribution of number of grubs and if each team obt
   </tbody>
 </table>
 
+As shown in this table, teams that lose their match tend to have less grubs than teams that win their match. However, losing all 6 grubs is not an immediate death sentence, as teams can still win without getting any of them. Likewise, getting all 6 grubs is not a guaranteed win.
+
 ## Assessment of Missingness
 
-There are a few matches outside the `partial` category that have the number of grubs missing. It's likely that these missing values are Not Missing at Random (NMAR), as this only happened to select teams, and no grubs being taken is clearly denoted as a `0` in the dataset (so it's not Missing by Design or Missing at Random). Let's see if they depend on the team that is playing, or are randomly distributed. For this permutation test, total variation distance is used as the test statistic.
+For this dataset as a whole, it's unlikely there are columns that are NMAR. There are plenty of null values, but it is due to the design of the dataset itself; since this dataset has information on both players and matches, some columns like `pick1` or `firstbaron` have plenty of missing values for each player. Furthermore, some leagues don't collect data on aspects of the matches at all, hence the `datacompleteness` column.
+
+There are a few matches outside the `partial` category that have the number of grubs missing. It's likely that these missing values are Missing at Random (MAR), as this only happened to select teams, and no grubs being taken is clearly denoted as a `0` in the dataset (so it's not Missing by Design or Not Missing at Random). Let's see if they depend on the team that is playing, or are randomly distributed. For this permutation test, total variation distance is used as the test statistic.
 
 <table border="1" class="dataframe">
   <thead>
@@ -388,6 +399,12 @@ There are a few matches outside the `partial` category that have the number of g
   frameborder="0"
 ></iframe>
 
+**p-value = 0.0**
+
+Here, we reject the null hypothesis and conclude that the missingness of `void_grubs` does depend on `league`.
+
+Now, let's see if `result` has any effect:
+
 - Null Hypothesis: The missingness of `void_grubs` does not depend on `result`.
 - Alternative Hypothesis: The missingness of `void_grubs` does depend on `result`.
 
@@ -398,8 +415,12 @@ There are a few matches outside the `partial` category that have the number of g
   frameborder="0"
 ></iframe>
 
+**p-value = 0.992**
+
+Here, we fail to reject the null hypothesis and do not conclude that the missingness of `void_grubs` depends on `result`.
+
 ## Hypothesis Testing
-Next, let's see if teams with a majority of grubs are able to obtain the herald. In theory, teams that grab a majority of grubs tend to want to play towards the top side of the map, which has the herald as an objective.
+Next, let's see if teams with a majority of grubs are able to obtain the herald. In theory, teams that grab a majority of grubs tend to want to play towards the top side of the map, which has the herald as an objective. Also, LoL is a snowball-y game, meaning teams that are in a winning position tend to stay in a winning position and increase their dominance on the map.
 
 - Null Hypothesis: Teams with 4+ grubs have an equal proportion of heralds to teams with less than 4 grubs.
 - Alternative Hypothesis: Teams with 4+ grubs have an greater proportion of heralds to teams with less than 4 grubs.
@@ -411,30 +432,50 @@ Next, let's see if teams with a majority of grubs are able to obtain the herald.
   frameborder="0"
 ></iframe>
 
+**p-value = 0.0**
+
+Here, we reject the null hypothesis and accept that teams with 4+ grubs tend to get herald.
+
 ## Framing a Prediction Problem
+
+Finally, it can be interesting to predict which team will end up getting more grubs in professional play. Some players have defined playstyles in which they prioritize grubs over other players. Some champions can take grubs quicker, while others can move to support their jungler faster. 
 
 Prediction Problem: How many grubs will a team get based on information before the game begins?
 
+For this problem, the "time of prediction" is right after champion draft. Thus, statistics like 15-minute gold difference or outcome of the match are not considered; it wouldn't make sense to predict if a team gets grubs after grubs are taken.
+
+This prediction problem is a multiclass classification problem. While it can be treated like a regression problem due to the numerical nature of the number of void grubs variable, ultimately the problem lies in classifying a team to a specific, quantized number of grubs. The metric being used to evaluate the model is accuracy. Since the goal of the prediction is to predict correctly as much as possible, accuracy is a fair metric over other metrics.
+
 ## Baseline Model
 
-This model utilizes a Linear Regression (with rounded results) to predict the amount of grubs a team gets. The model encodes the team jungler's `playername` and `champion` using OneHotEncoder. In theory, the team's jungler would have an effect on how many grubs are obtained.
+To begin, let's see if the jungle player and their champion is a good predictor of the amount of grubs they will get. In theory, the team's jungler would have an effect on how many grubs are obtained.
+
+This first model utilizes a Linear Regression (with rounded results to properly classify) to predict the amount of grubs a team gets. The model encodes the team jungler's `playername` and `champion` using OneHotEncoder.
 
 With this model, an accuracy of 0.1762 was obtained. This accuracy is not great, almost amounting to random guesses.
 
 ## Final Model
 
-This model utilizes a Decision Tree Classifier to predict the amount of grubs a team gets. The model encodes the `teamname`, `playername` and `champion` using OneHotEncoder. 
+To improve the model, features about the whole team is added. As much as solo queue players may beg to differ, LoL is a team game, and the jungler's movements and decisions are greatly affected by their teammates.
 
-With this model, an accuracy of 0.272 was obtained. This accuracy is still not great, but is an improvement to the baseline.
+This model utilizes a Decision Tree Classifier to predict the amount of grubs a team gets. This model takes a set of data, and "splits" them into separate nodes based on different categorizers, until the maximum depth is achieved. The model encodes the `teamname`, and `pos_champion` of each role using OneHotEncoder. The jungler's `playername` was dropped for being redundant, assuming only one jungler plays for each team.
+
+With this model, an accuracy of 0.272 was obtained. This accuracy is still not great, but is an improvement to the baseline. The best parameters found for this model were `entropy` for its `criterion` and a `max_depth` of `5`.
 
 ## Fairness Analysis
+
+To conclude, a fairness analysis was conducted on the final model. The two groups that were compared are the LCS league and the LCK league to see if the model differs between regions. Accuracy was chosen again as the metric of choice, and the test statistic is the difference in accuracy between the LCS and the LCK.
 
 - Null Hypothesis: Our model is fair. Its accuracy between the LCS and the LCK should be similar, and any differences are due to random chance.
 - Alternative Hypothesis: Our model is unfair. Its accuracy for the LCS is higher than the LCK.
 
-- <iframe
+<iframe
   src="assets/accuracy.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
+
+**p-value = 0.192**
+
+The p-value is greater than 0.05. Therefore, we fail to reject the null hypothesis and cannot conclude that the LCS has a higher accuracy than the LCK.
