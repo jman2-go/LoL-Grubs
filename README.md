@@ -129,7 +129,7 @@ Some rows had matches where their `datacompleteness` was not `complete` (marked 
   frameborder="0"
 ></iframe>
 
-This histogram shows the distribution of void grubs taken. Surprisingly, 0 grubs taken was the most common number of grubs taken. 3 grubs taken being the second most common amount makes sense, as whoever makes it to grubs first can take all 3 grubs before the other team notices.
+This histogram shows the distribution of void grubs taken. `count` refers to the number of matches in which that number of grubs was observed. Surprisingly, 0 grubs taken was the most common number of grubs taken. 3 grubs taken being the second most common amount makes sense, as whoever makes it to grubs first can take all 3 grubs before the other team notices.
 
 ### Bivariate Analysis
 
@@ -140,7 +140,7 @@ This histogram shows the distribution of void grubs taken. Surprisingly, 0 grubs
   frameborder="0"
 ></iframe>
 
-This box plot shows the distribution of grubs taken for each result. Expectedly, teams that obtained lower grubs have a noticeably lower distribution of grubs taken than teams that win.
+This box plot shows the distribution of grubs taken for each result. Expectedly, teams that lose their match have a noticeably lower distribution of grubs taken than teams that win.
 
 <iframe
   src="assets/bi2.html"
