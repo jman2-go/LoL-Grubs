@@ -134,7 +134,7 @@ This histogram shows the distribution of void grubs taken. Surprisingly, 0 grubs
 ### Bivariate Analysis
 
 <iframe
-  src="assets/bi1.html"
+  src="bi1.html"
   width="800"
   height="600"
   frameborder="0"
