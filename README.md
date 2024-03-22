@@ -1,6 +1,6 @@
 # LoL-Grubs
 
-![voidgrubs.jpg](attachment:voidgrubs.jpg)
+![voidgrubs.jpg](voidgrubs.jpg)
 
 (Image source: Riot Games)
 
