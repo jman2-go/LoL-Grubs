@@ -134,7 +134,7 @@ This histogram shows the distribution of void grubs taken. Surprisingly, 0 grubs
 ### Bivariate Analysis
 
 <iframe
-  src="bi1.html"
+  src="assets/bi1.html"
   width="800"
   height="600"
   frameborder="0"
@@ -380,3 +380,61 @@ There are a few matches outside the `partial` category that have the number of g
 
 - Null Hypothesis: The missingness of `void_grubs` does not depend on `league`.
 - Alternative Hypothesis: The missingness of `void_grubs` does depend on `league`.
+
+<iframe
+  src="assets/mis1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+- Null Hypothesis: The missingness of `void_grubs` does not depend on `result`.
+- Alternative Hypothesis: The missingness of `void_grubs` does depend on `result`.
+
+<iframe
+  src="assets/mis2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+## Hypothesis Testing
+Next, let's see if teams with a majority of grubs are able to obtain the herald. In theory, teams that grab a majority of grubs tend to want to play towards the top side of the map, which has the herald as an objective.
+
+- Null Hypothesis: Teams with 4+ grubs have an equal proportion of heralds to teams with less than 4 grubs.
+- Alternative Hypothesis: Teams with 4+ grubs have an greater proportion of heralds to teams with less than 4 grubs.
+
+<iframe
+  src="assets/hyp1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+## Framing a Prediction Problem
+
+Prediction Problem: How many grubs will a team get based on information before the game begins?
+
+## Baseline Model
+
+This model utilizes a Linear Regression (with rounded results) to predict the amount of grubs a team gets. The model encodes the team jungler's `playername` and `champion` using OneHotEncoder. In theory, the team's jungler would have an effect on how many grubs are obtained.
+
+With this model, an accuracy of 0.1762 was obtained. This accuracy is not great, almost amounting to random guesses.
+
+## Final Model
+
+This model utilizes a Decision Tree Classifier to predict the amount of grubs a team gets. The model encodes the `teamname`, `playername` and `champion` using OneHotEncoder. 
+
+With this model, an accuracy of 0.272 was obtained. This accuracy is still not great, but is an improvement to the baseline.
+
+## Fairness Analysis
+
+- Null Hypothesis: Our model is fair. Its accuracy between the LCS and the LCK should be similar, and any differences are due to random chance.
+- Alternative Hypothesis: Our model is unfair. Its accuracy for the LCS is higher than the LCK.
+
+- <iframe
+  src="assets/accuracy.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
