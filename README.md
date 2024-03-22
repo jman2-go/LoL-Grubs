@@ -29,6 +29,143 @@ First, the dataset was split into two new datasets, one having information about
 
 Some rows had matches where their `datacompleteness` was not `complete` (marked `partial`), so they did not have complete information on the number of void grubs that were taken. These rows were removed as well. Additionally, a column called `majority_grubs` was added to denote if a team was able to take 4 or more grubs.
 
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gameid</th>
+      <th>league</th>
+      <th>split</th>
+      <th>patch</th>
+      <th>teamname</th>
+      <th>result</th>
+      <th>void_grubs</th>
+      <th>opp_void_grubs</th>
+      <th>playoffs</th>
+      <th>heralds</th>
+      <th>majority_grubs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>226</th>
+      <td>LOLTMNT06_13630</td>
+      <td>LEC</td>
+      <td>Winter</td>
+      <td>14.01</td>
+      <td>Team BDS</td>
+      <td>0</td>
+      <td>6.0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>LOLTMNT06_13630</td>
+      <td>LEC</td>
+      <td>Winter</td>
+      <td>14.01</td>
+      <td>G2 Esports</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>6.0</td>
+      <td>0</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>LOLTMNT06_12701</td>
+      <td>LEC</td>
+      <td>Winter</td>
+      <td>14.01</td>
+      <td>Rogue</td>
+      <td>0</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>LOLTMNT06_12701</td>
+      <td>LEC</td>
+      <td>Winter</td>
+      <td>14.01</td>
+      <td>SK Gaming</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>0</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>250</th>
+      <td>LOLTMNT06_13667</td>
+      <td>LEC</td>
+      <td>Winter</td>
+      <td>14.01</td>
+      <td>Karmine Corp</td>
+      <td>0</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+
+### Univariate Analysis
+
+<iframe
+  src="assets/uni.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+This histogram shows the distribution of void grubs taken. Surprisingly, 0 grubs taken was the most common number of grubs taken. 3 grubs taken being the second most common amount makes sense, as whoever makes it to grubs first can take all 3 grubs before the other team notices.
+
+### Bivariate Analysis
+
+<iframe
+  src="assets/bi1.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+This box plot shows the distribution of grubs taken for each result. Expectedly, teams that obtained lower grubs have a noticeably lower distribution of grubs taken than teams that win.
+
+<iframe
+  src="assets/bi2.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+
+This bar plot depicts the total number of grubs collected in the regular season of the LCS Spring split, the North American professional LoL league. The final rankings from the regular season are: 
+1. FlyQuest (10W - 4L)
+1. 100 Thieves (10W - 4L)
+3. Cloud9 (8W - 6L)
+4. Team Liquid (7W - 7W)
+5. Dignitas (6W - 8L)
+5. NRG Kia (6W - 8L)
+7. Shopify Rebellion (5W - 9L)
+8. Immortals (4W - 10L)
+
+Note: Tiebreakers were played but are not included in the summation of grubs for this bar plot. 
+
+The total number of grubs taken does show some correlation with the final standing; however, there are a few noticeable outliers. For instance, Cloud9 took the most grubs, but came in 3rd place. Immortals had the 4th-highest number of grubs, but came in last. On the flip side, 100 Thieves had the second-least grubs, but came in second overall. 
+
+Lastly, this plot shows the distribution of number of grubs and if each team obtained the rift herald or not. Compared to the results plot, the distribution of grubs for teams that did not get the rift herald end up being lower. 
+
 ### Aggregate Statistics
 <table border="1" class="dataframe">
   <thead>
@@ -64,3 +201,182 @@ Some rows had matches where their `datacompleteness` was not `complete` (marked 
     </tr>
   </tbody>
 </table>
+
+## Assessment of Missingness
+
+There are a few matches outside the `partial` category that have the number of grubs missing. It's likely that these missing values are Not Missing at Random (NMAR), as this only happened to select teams, and no grubs being taken is clearly denoted as a `0` in the dataset (so it's not Missing by Design or Missing at Random). Let's see if they depend on the team that is playing, or are randomly distributed. For this permutation test, total variation distance is used as the test statistic.
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>grubs_missing</th>
+      <th>False</th>
+      <th>True</th>
+    </tr>
+    <tr>
+      <th>league</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AL</th>
+      <td>0.021987</td>
+      <td>0.017001</td>
+    </tr>
+    <tr>
+      <th>CBLOL</th>
+      <td>0.037209</td>
+      <td>0.028771</td>
+    </tr>
+    <tr>
+      <th>CBLOLA</th>
+      <td>0.034672</td>
+      <td>0.026810</td>
+    </tr>
+    <tr>
+      <th>DCup</th>
+      <td>0.000000</td>
+      <td>0.007062</td>
+    </tr>
+    <tr>
+      <th>EBL</th>
+      <td>0.027907</td>
+      <td>0.021578</td>
+    </tr>
+    <tr>
+      <th>ESLOL</th>
+      <td>0.027907</td>
+      <td>0.021578</td>
+    </tr>
+    <tr>
+      <th>GLL</th>
+      <td>0.026638</td>
+      <td>0.020598</td>
+    </tr>
+    <tr>
+      <th>HC</th>
+      <td>0.011416</td>
+      <td>0.008828</td>
+    </tr>
+    <tr>
+      <th>HM</th>
+      <td>0.025793</td>
+      <td>0.019944</td>
+    </tr>
+    <tr>
+      <th>LCK</th>
+      <td>0.079915</td>
+      <td>0.061793</td>
+    </tr>
+    <tr>
+      <th>LCKC</th>
+      <td>0.088372</td>
+      <td>0.068332</td>
+    </tr>
+    <tr>
+      <th>LCO</th>
+      <td>0.030021</td>
+      <td>0.023213</td>
+    </tr>
+    <tr>
+      <th>LCS</th>
+      <td>0.030444</td>
+      <td>0.023540</td>
+    </tr>
+    <tr>
+      <th>LDL</th>
+      <td>0.000000</td>
+      <td>0.107500</td>
+    </tr>
+    <tr>
+      <th>LEC</th>
+      <td>0.048626</td>
+      <td>0.037599</td>
+    </tr>
+    <tr>
+      <th>LFL</th>
+      <td>0.039746</td>
+      <td>0.030733</td>
+    </tr>
+    <tr>
+      <th>LFL2</th>
+      <td>0.013953</td>
+      <td>0.010789</td>
+    </tr>
+    <tr>
+      <th>LIT</th>
+      <td>0.027061</td>
+      <td>0.020925</td>
+    </tr>
+    <tr>
+      <th>LJL</th>
+      <td>0.030867</td>
+      <td>0.023867</td>
+    </tr>
+    <tr>
+      <th>LLA</th>
+      <td>0.045243</td>
+      <td>0.034983</td>
+    </tr>
+    <tr>
+      <th>LPL</th>
+      <td>0.000000</td>
+      <td>0.112208</td>
+    </tr>
+    <tr>
+      <th>LPLOL</th>
+      <td>0.025793</td>
+      <td>0.019944</td>
+    </tr>
+    <tr>
+      <th>LVP SL</th>
+      <td>0.041438</td>
+      <td>0.032041</td>
+    </tr>
+    <tr>
+      <th>NACL</th>
+      <td>0.054968</td>
+      <td>0.042503</td>
+    </tr>
+    <tr>
+      <th>NEXO</th>
+      <td>0.010994</td>
+      <td>0.008501</td>
+    </tr>
+    <tr>
+      <th>NLC</th>
+      <td>0.027907</td>
+      <td>0.021578</td>
+    </tr>
+    <tr>
+      <th>PCS</th>
+      <td>0.051163</td>
+      <td>0.039561</td>
+    </tr>
+    <tr>
+      <th>PRM</th>
+      <td>0.039746</td>
+      <td>0.030733</td>
+    </tr>
+    <tr>
+      <th>TCL</th>
+      <td>0.027484</td>
+      <td>0.021252</td>
+    </tr>
+    <tr>
+      <th>UL</th>
+      <td>0.028753</td>
+      <td>0.022232</td>
+    </tr>
+    <tr>
+      <th>VCS</th>
+      <td>0.043975</td>
+      <td>0.034002</td>
+    </tr>
+  </tbody>
+</table>
+
+- Null Hypothesis: The missingness of `void_grubs` does not depend on `league`.
+- Alternative Hypothesis: The missingness of `void_grubs` does depend on `league`.
