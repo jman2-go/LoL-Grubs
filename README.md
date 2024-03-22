@@ -123,7 +123,7 @@ Some rows had matches where their `datacompleteness` was not `complete` (marked 
 ### Univariate Analysis
 
 <iframe
-  src="assets/uni.html"
+  src="uni.html"
   width="800"
   height="600"
   frameborder="0"
