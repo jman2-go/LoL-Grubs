@@ -28,3 +28,39 @@ This dataset from [Oracle's Elixir](https://oracleselixir.com/tools/downloads) c
 First, the dataset was split into two new datasets, one having information about the players, and one having information about the overall outcome of the match. Some rows had matches played in 2024 were played in patches before 14.01; these were all removed, as void grubs only exist in patch 14.01 and beyond. 
 
 Some rows had matches where their `datacompleteness` was not `complete` (marked `partial`), so they did not have complete information on the number of void grubs that were taken. These rows were removed as well. Additionally, a column called `majority_grubs` was added to denote if a team was able to take 4 or more grubs.
+
+### Aggregate Statistics
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>median</th>
+      <th>min</th>
+      <th>max</th>
+    </tr>
+    <tr>
+      <th>result</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2.450972</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.806261</td>
+      <td>3.0</td>
+      <td>0.0</td>
+      <td>6.0</td>
+    </tr>
+  </tbody>
+</table>
